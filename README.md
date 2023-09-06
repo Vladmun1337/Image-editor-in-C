@@ -1,3 +1,9 @@
+#### Muntean Vlad-Andrei 315CA 2022-2023
+
+# The *TikTok* Image Editor
+
+## Implementation
+
 For this project, the photo editor uses grayscale (pgm) and
 colored (ppm) pixel map-type images. Every image is seen as a matrix of
 characters and is stored within a structure called "photo", along with the
@@ -14,6 +20,7 @@ assure a better reading. The function *choose_command()* returns a letter
 for every type of command read, to assure the functionality of the switch
 statement.
 
+## LOAD
 
 Loading the needed image is done with the *load_file()* command. Upon
 opening the file, we will erase the old data from the previous image and print
@@ -27,6 +34,7 @@ of type char, saved with no spaces or newlines. For ascii, the pixels are read
 with *fprintf()* as integers. After loading the image into our program's
 memory, the file is closed.
 
+## SAVE
 
 For the **SAVE** command, the file will be open with the write
 specifier("w"), and we will read the new file name with *fgets()*, in order to
@@ -42,6 +50,7 @@ lines and maximum value as ascii, but for ascii, the matrix will be written
 as integers with spaces inbetween, whereas binary
 will have unspaced characters.
 
+## SELECT
 
 The **SELECT** command will modify the "selected" structure with the read
 coordinates. In case the next word read is ALL, the coordinates will be
@@ -51,12 +60,14 @@ exit the image's bounds and swap the coordinates if they are in read in
 decreasing order (to better ease operations). In case the selection fails, the
 old coordinates remain.
 
+## CROP
 
 **Cropping** the image will create a new matrix, with the same magic
 number and maximum value, but its width and height will be determined by the
 selected coordinates. In this matrix, all the pixels from the selection are
 moved, the old matrix is freed and replaced in memory by the cropped matrix. 
 
+## APPLY
 
 The **APPLY** command has four four possible effects that I have indexed as
 such: 1. *EDGE*, 2. *SHARPEN*, 3. *BLUR* and 4. *GAUSSIAN_BLUR*. The effects are
@@ -76,8 +87,9 @@ original matrix. (**Note**: the APPLY command only works for colored images, in
 case the existing image is grayscale, the specific message is shown and the
 function is stopped).
 
+## HISTOGRAM
 
-**HISTOGRAM** is available only for grayscale images. It reads two inputs
+**HISTOGRAM is available only for grayscale images**. It reads two inputs
 (length in stars for each bin and number of bins). In case the number of inputs
 is different from 2, the command is deemed invalid and the function stops.
 The value of each bin is stored in an array ("histo_map"). We will use a "step"
@@ -88,6 +100,7 @@ histogram, we will calculate tha maximum value from the array of bins and
 divide every bin with it, the result later being multiplied by the number of
 stars chosen.
 
+## EQUALIZE
 
 **EQUALIZE** is another command that works only on grayscale images. For
 this, we can reuse the "calc_histo()" function, used previously for the
@@ -98,6 +111,7 @@ multiplied by 255 (value that coincides with the maximum value of our matrix)
 and then divided by the area of the image (lines * columns). The result is
 rounded and clamped.
 
+## ROTATE
 
 The  **ROTATE** command works on both types of images. All selections
 smaller than the whole image must be square. In case of a non-square image
@@ -117,10 +131,12 @@ need to invert the values of the rows and columns of our photo, free the old
 matrix and copy the new one in our structure's memory. The helper matrix is
 then freed.
 
+## EXIT
 
-**EXIT** will free all resources and end the program. If no image is
+Will free all resources and end the program. If no image is
 loaded, a specific message will be printed before exit.
 
+## Additional information
 
 An invalid command will trigger a message and the program will catch
 any residual information written on that line to avoid interpreting them as
